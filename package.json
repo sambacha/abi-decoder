@@ -3,6 +3,7 @@
   "version": "2.3.0",
   "description": "Nodejs and Javascript library for decoding data params and events from ethereum transactions\"",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "pretest": "eslint --ignore-path .eslintignore .",
     "test": "mocha test",
@@ -24,6 +25,8 @@
   },
   "homepage": "https://github.com/ConsenSys/abi-decoder#readme",
   "dependencies": {
+    "ethereum-types": "^2.1.2",
+    "web3": "^1.2.11",
     "web3-eth-abi": "^1.2.1",
     "web3-utils": "^1.2.1"
   },
@@ -40,7 +43,7 @@
     "eslint": "^6.0.1",
     "json-loader": "^0.5.7",
     "mocha": "^5.2.0",
-    "webpack": "^4.29.1",
+    "webpack": "^4.44.1",
     "webpack-cli": "^3.2.3"
   }
 }
