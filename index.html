@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<script src="bower_components/abi-decoder/dist/abi-decoder.js" ></script>
+		<script src="./dist/abi-decoder.js" ></script>
 		<style>
 			.padding-tab {padding-left: 40px;}
 			.json-name {color: navy;}
@@ -14,7 +14,7 @@
 		</style>
 	</head>
 	<body>
-    	<h1 />abi-decoder</h1>
+    	<h1> ABI-Web3-Decoder </h1>
 		<p>
 			Nodejs and Javascript library for decoding data params and events from etherem transactions
 		</p>
@@ -37,11 +37,11 @@
 				<textarea id="txData" style="width:80%;"></textarea>
 			</div>
 		</div>
-		</br>
+<br>
 		
 		<input type="button" value="Decode Tx data" onclick='decodeTransaction(); false'/>
-		</br>
-		</br>
+<br>
+<br>
 		<div id="decodedData">
 			Decoded Tx Data
 		</div>
@@ -60,7 +60,7 @@
 		</div>
 		<hr />
 		<p>
-			For more information check ABI Decoder: <a href="https://github.com/ConsenSys/abi-decoder/blob/master/README.md" target="blank">https://github.com/ConsenSys/abi-decoder/blob/master/README.md</a>
+			web3 ABI Decoder
 		</p>
 		<script>
 		function decodeTransaction(){
