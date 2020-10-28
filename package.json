@@ -1,6 +1,6 @@
 {
   "name": "evm-abi-decoder",
-  "version": "2.4.1",
+  "version": "2.5.0",
   "description": "Nodejs and Javascript library for decoding data params and events from ethereum transactions\"",
   "main": "index.js",
   "types": "index.d.ts",
