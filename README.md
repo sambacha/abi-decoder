@@ -88,6 +88,6 @@ web3.eth.getTransactionReceipt(
   "0x9199e262aaab0a6ec99558b3e9f42397c07a2bb9c6befb637643aebfb03cc32a",
   function (e, receipt) {
     const decodedLogs = abiDecoder.decodeLogs(receipt.logs);
-  }
+  },
 );
 ```

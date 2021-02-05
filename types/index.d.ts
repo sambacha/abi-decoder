@@ -1,11 +1,6 @@
 // Must import underyling ethereum types at top-level for
 // typechecking to pass all the way through.
-import {
-  AbiDefinition,
-  MethodAbi,
-  LogEntry,
-  SolidityTypes,
-} from "ethereum-types";
+import { AbiDefinition, MethodAbi, LogEntry, SolidityTypes } from "ethereum-types";
 
 // This object becomes the default import.
 import AbiDecoder from "./index";
