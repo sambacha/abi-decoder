@@ -1,6 +1,6 @@
 {
   "name": "abi-decoder-ts",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Typescript Solidity ABI Decoder",
   "license": "GPL-3.0",
   "main": "cjs/index.js",
