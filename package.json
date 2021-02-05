@@ -1,0 +1,42 @@
+{
+  "name": "abi-decoder-ts",
+  "version": "3.0.0",
+  "description": "Typescript Solidity ABI Decoder",
+  "license": "GPL-3.0",
+  "main": "cjs/index.js",
+  "module": "esm/index.js",
+  "scripts": {
+    "build": "rimraf esm cjs && tsc && tsc -p tsconfig.cjs.json",
+    "lint": "npx prettier --write .",
+    "prepublishOnly": "npm run build",
+    "test": "mocha test"
+  },
+  "dependencies": {
+    "bn.js": "^5.1.3",
+    "web3-eth-abi": "^1.3.0",
+    "web3-utils": "^1.3.0"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^4.11.6",
+    "@types/chai": "^4.2.12",
+    "@types/mocha": "^8.0.3",
+    "chai": "^4.2.0",
+    "mocha": "^8.1.3",
+    "rimraf": "^3.0.2",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sambacha/abi-decoder.git"
+  },
+  "keywords": [
+    "ethereum",
+    "abi",
+    "decode"
+  ],
+  "bugs": {
+    "url": "https://github.com/sambacha/abi-decoder/issues"
+  },
+  "homepage": "https://github.com/sambacha/abi-decoder#readme"
+}
