@@ -4,8 +4,8 @@ npm-debug.log*
 coverage
 node_modules
 .npm
-cjs
-esm
+#cjs
+#esm
 .DS_Store
 *.tgz
 *.tar.gz
