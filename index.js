@@ -10,18 +10,27 @@ function _getABIs() {
   return state.savedABIs;
 }
 
+function _typeToString(input) {
+  if (input.type === "tuple") {
+    return "(" + input.components.map(_typeToString).join(",") + ")";
+  }
+  return input.type;
+}
+
 function _addABI(abiArray) {
+
   if (Array.isArray(abiArray)) {
     // Iterate new abi to generate method id"s
     abiArray.map(function(abi) {
       if (abi.name) {
-        let signature;
-        if (abi.type === "event") {
-          signature = abiCoder.encodeFunctionSignature(abi);
-        } else {
-          signature = abiCoder.encodeEventSignature(abi);
-        }
-
+        const signature = sha3(
+          abi.name +
+            "(" +
+            abi.inputs
+              .map(_typeToString)
+              .join(",") +
+            ")"
+        );
         if (abi.type === "event") {
           state.methodIDs[signature.slice(2)] = abi;
         } else {
@@ -41,14 +50,16 @@ function _removeABI(abiArray) {
     // Iterate new abi to generate method id"s
     abiArray.map(function(abi) {
       if (abi.name) {
-        let signature;
-        if (abi.type === "event") {
-          signature = abiCoder.encodeFunctionSignature(abi);
-        } else {
-          signature = abiCoder.encodeEventSignature(abi);
-        }
-
-
+        const signature = sha3(
+          abi.name +
+            "(" +
+            abi.inputs
+              .map(function(input) {
+                return input.type;
+              })
+              .join(",") +
+            ")"
+        );
         if (abi.type === "event") {
           if (state.methodIDs[signature.slice(2)]) {
             delete state.methodIDs[signature.slice(2)];
@@ -69,56 +80,53 @@ function _getMethodIDs() {
   return state.methodIDs;
 }
 
-function _isArrayKey(key) {
-  return /^\d+$/.test(key) || key === "__length__";
-}
-
-function _isArray(obj) {
-  if (!Array.isArray(obj)) {
-    return false;
-  }
-
-  return Object.keys(obj).every(value => {
-    return _isArrayKey(value);
-  });
-}
-
-function _cleanObject(obj) {
-  if (_isArray(obj)) {
-
-    // Return an array with all of the elements recursively cleaned.
-    const cleanedArray = [];
-    for (const elt of obj) {
-      cleanedArray.push(_cleanObject(elt));
-    }
-    return cleanedArray;
-  } else if (typeof obj === "object") {
-
-    // Remove all of the array-style keys, and clean the values for the non array-style keys.
-    const cleanedObject = {}; 
-    for (const [key, value] of Object.entries(obj)) {
-      // Only keep keys that are not array keys.
-      if (!_isArrayKey(key)) {
-        cleanedObject[key] = _cleanObject(value);
-      }
-    }
-
-    return cleanedObject;
-  } else {
-    // If the object is not an array or an object, we assume it's a primative and return it.
-    return obj;
-  }
-}
-
 function _decodeMethod(data) {
   const methodID = data.slice(2, 10);
   const abiItem = state.methodIDs[methodID];
-
   if (abiItem) {
-    return {
+    let decoded = abiCoder.decodeParameters(abiItem.inputs, data.slice(10));
+
+    let retData = {
       name: abiItem.name,
-      params: _cleanObject(abiCoder.decodeParameters(abiItem.inputs, data.slice(10)))
+      params: [],
     };
+
+    for (let i = 0; i < decoded.__length__; i++) {
+      let param = decoded[i];
+      let parsedParam = param;
+      const isUint = abiItem.inputs[i].type.indexOf("uint") === 0;
+      const isInt = abiItem.inputs[i].type.indexOf("int") === 0;
+      const isAddress = abiItem.inputs[i].type.indexOf("address") === 0;
+
+      if (isUint || isInt) {
+        const isArray = Array.isArray(param);
+
+        if (isArray) {
+          parsedParam = param.map(val => new BN(val).toString());
+        } else {
+          parsedParam = new BN(param).toString();
+        }
+      }
+
+      // Addresses returned by web3 are randomly cased so we need to standardize and lowercase all
+      if (isAddress) {
+        const isArray = Array.isArray(param);
+
+        if (isArray) {
+          parsedParam = param.map(_ => _.toLowerCase());
+        } else {
+          parsedParam = param.toLowerCase();
+        }
+      }
+
+      retData.params.push({
+        name: abiItem.inputs[i].name,
+        value: parsedParam,
+        type: abiItem.inputs[i].type,
+      });
+    }
+
+    return retData;
   }
 }
 
@@ -181,7 +189,7 @@ function _decodeLogs(logs) {
           } else {
             decodedP.value = new BN(decodedP.value).toString(10);
           }
-          
+
         }
 
         decodedParams.push(decodedP);
