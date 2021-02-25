@@ -2,7 +2,7 @@
   "name": "abi-decoder-lts",
   "version": "2.4.0",
   "description": "LTS Nodejs and Javascript library for decoding data params and events from ethereum transactions\"",
-  "main": "index.js",
+  "main": "dist/abi-decoder.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha test",
     "dist": "webpack"
